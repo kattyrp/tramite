@@ -66,30 +66,8 @@ class Remitente(models.Model):
     def __unicode__(self):
         return u' %s ' % (self.mom_pernat)
 
-class Documento(models.Model):
-    usuario = models.ForeignKey(User)
-    area = models.ForeignKey(Area,verbose_name="Area Destinataria")
-    remitente = models.ForeignKey(Remitente,verbose_name="Remitentes",related_name="remitentes")
-    tipodoc = models.ForeignKey(Tipo_Documento,verbose_name="Tipo de Documento")
-    asunto = models.ForeignKey(Asunto,verbose_name="Asunto")
-    archivo = models.FileField(upload_to ='archivo',blank = True, null = True, verbose_name = "archivo")
-    folios = models.CharField(max_length = 2,verbose_name="N° Folios") 
-    observacion = models.TextField(help_text='Redacta las observaciones del documento')
-    estado = models.CharField(max_length=10,choices=ESTADO_CHOICES, default = "Entregado")    
-
-    def __unicode__(self):
-        return u'%s' % (self.asunto)
-
-    def ver_seguimiento(self):
-        return '<a href=/ver/%s/ target="_blank" >Detalles</a>' % self.id
-    ver_seguimiento.allow_tags = True
-
-    def ver_historial(self):
-        self.documento_generado_set.filter(documento_id = self.id)
-        return '<a href=/ver/historial/%s/ target="_blank" >Historial</a>' % self.id
-    ver_historial.allow_tags = True
-
 class Usuario(User):
+    usuario = models.ForeignKey(User,related_name="usuarios")
     Nombres = models.CharField(max_length=50)
     ApellidoPaterno = models.CharField("Ape. Pat.",max_length=50)
     ApellidoMaterno = models.CharField("Ape. Mat.",max_length=50)
@@ -113,6 +91,29 @@ class Usuario(User):
             self.last_name = self.ApellidoPaterno + ' ' +  self.ApellidoMaterno
             self.email = self.Email
             return super(Usuario, self).save()
+
+class Documento(models.Model):
+    usuario = models.ForeignKey(User)
+    area = models.ForeignKey(Area,verbose_name="Area Destinataria")
+    remitente = models.ForeignKey(Remitente,verbose_name="Remitentes",related_name="remitentes")
+    tipodoc = models.ForeignKey(Tipo_Documento,verbose_name="Tipo de Documento")
+    asunto = models.ForeignKey(Asunto,verbose_name="Asunto")
+    archivo = models.FileField(upload_to ='archivo',blank = True, null = True, verbose_name = "archivo")
+    folios = models.CharField(max_length = 2,verbose_name="N° Folios") 
+    observacion = models.TextField(help_text='Redacta las observaciones del documento')
+    estado = models.CharField(max_length=10,choices=ESTADO_CHOICES, default = "Entregado")    
+
+    def __unicode__(self):
+        return u'%s' % (self.asunto)
+
+    def ver_seguimiento(self):
+        return '<a href=/ver/%s/ target="_blank" >Detalles</a>' % self.id
+    ver_seguimiento.allow_tags = True
+
+    def ver_historial(self):
+        self.documento_generado_set.filter(documento_id = self.id)
+        return '<a href=/ver/historial/%s/ target="_blank" >Historial</a>' % self.id
+    ver_historial.allow_tags = True
 
 
 class Documento_generado(models.Model):
