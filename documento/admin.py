@@ -1,7 +1,7 @@
-
 from django.contrib import admin
 from documento.models import Requisito, Asunto, Tipo_Documento, Estado_Documento, Area, Remitente, Documento,Documento_generado, Usuario
 from django import forms
+from django.contrib.auth.models import User
 
 class RemitenteAdmin(admin.ModelAdmin):
     list_display = ('mom_pernat','documento','nro_documento')
@@ -18,7 +18,6 @@ admin.site.register(Remitente, RemitenteAdmin)
 
 class DocumentoAdmin(admin.ModelAdmin):
     list_display = ('remitente','area','tipodoc','asunto','estado','ver_seguimiento','ver_historial','archivo')
-    #list_display_links = ['remitente','estado']
     search_fields = ('asunto__nom_asunto','remitente__mom_pernat')
     fieldsets = (
         ('Datos del Documento', {
@@ -28,6 +27,10 @@ class DocumentoAdmin(admin.ModelAdmin):
     raw_id_fields = ('remitente',)
     list_filter = ['asunto__nom_asunto','tipodoc__nom_tipo_doc']
     valid_lookups = ('asunto')
+
+    def save_model(self, request, obj, form, change):
+        obj.usuario = request.user
+        obj.save()
     
 admin.site.register(Documento, DocumentoAdmin)
 
