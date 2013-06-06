@@ -1,0 +1,72 @@
+{% extends "admin/base_site.html" %}
+{% load i18n adminmedia %}
+
+{% block extrahead %}{{ block.super }}
+<script type="text/javascript" src="../../../jsi18n/"></script>
+<link rel="stylesheet" type="text/css" href="/static/forms.css" />
+<script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.8.2.min.js"></script>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">{% trans 'Detalle del Documento' %}</h1>
+{% endblock %}
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+	hola
+<a href="javascript: window.close()">{% trans 'Cerrar todo' %} &rsaquo; </a>
+</div>
+{% endblock %}
+
+{% block title %} Documento {% endblock %}
+{% block content %}
+
+<form id='formulario' name='formulario' method="POST" action="">{% csrf_token %}    
+<fieldset class="module aligned">
+  <h2>Datos del Documento</h2>
+  <input type="hidden" value="{{user.id}}" name="area_remitente" id="area_remitente"  >
+  <input type="hidden" value="{{user.id}}" name="usuario" id="usuario">
+  <input type="hidden" value="{{documento_detalle.id}}" name="id_documento" id="id_documento">
+  <div class="form-row">
+        <div class="field-box">
+          <label class="required" >Remitente:</label>
+          {{ documento_detalle.remitente|escape }}
+        </div>
+        <div class="field-box">
+          <label class="required inline" >Tipo de Documento:</label>
+          {{ documento_detalle.tipodoc|escape }}
+        </div>
+        <div class="field-box">
+          <label class="required" >Asunto:</label>
+          {{ documento_detalle.asunto|escape }}
+        </div>
+        <div class="field-box">
+          <label class="required inline" >Estado del documento:</label>
+          {{ documento_detalle.estado|escape }}
+        </div>
+        <div class="field-box">
+          <label class="required inline" >N° Folios:</label>
+          {{ documento_detalle.folios|escape }}
+        </div>
+        <div class="field-box">
+          <label class="required inline" >Observaciones:</label>
+          {{ documento_detalle.observacion|escape }}
+        </div>
+</div>
+</fieldset>
+<div class="row-fluid well">
+        <object 
+          {% if documento_detalle.archivo %}
+          data="{{MEDIA_URL}}{{documento_detalle.archivo}}#zoom=100&toolbar=1&navpanes=0&scrollbar=1&page=1&view=FitH"
+          {% else %}
+          data="{{MEDIA_URL}}{{documento_detalle.archivo}}#zoom=100&toolbar=1&navpanes=0&scrollbar=1&page=1&view=FitH"
+          {% endif %} 
+          type="application/pdf" 
+          width="820" 
+          height="400">
+          <div class="alert">
+          <i class="icon-eye-open"></i> Si tienes problemas para visualizar el silabo, puede que no tengas instalado Adobe Reader, descargarlo <a href="http://get.adobe.com/es/reader/" class="btn btn-mini btn-info">{% trans 'Aquí' %}</a>
+          </div>
+        </object>
+</div>   
+</form>
+{% endblock %}

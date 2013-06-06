@@ -1,0 +1,111 @@
+{% extends "admin/base_site.html" %}
+{% load i18n adminmedia %}
+
+{% block extrahead %}{{ block.super }}
+<script type="text/javascript" src="../../../jsi18n/"></script>
+<link rel="stylesheet" type="text/css" href="/static/forms.css" />
+{% endblock %}
+{% block title %} Documento {% endblock %}
+
+{% block branding %}
+<h1 id="site-name">{% trans 'Detalle del Documento' %}</h1>
+{% endblock %}
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  hola
+<a href="javascript: window.close()">{% trans 'Cerrar todo' %} &rsaquo; </a>
+</div>
+{% endblock %}
+{% block content %}
+
+<form id='formulario' name='formulario' method="POST" action="">{% csrf_token %}    
+<fieldset class="module aligned">
+<h2>Datos del Documento</h2>
+<div class="form-row">
+    <div class="field-box">    
+        <label class="required" >usuario:</label>
+        {{ documento_detalle.usuario|escape }}
+    </div>
+    <div class="field-box">
+        <label class="required" >Asunto:</label>
+        {{ documento_detalle.documento|escape }}
+    </div>
+    <div class="field-box">
+        <label class="required inline" >Area recibida:</label>
+        {{ documento_detalle.area|escape }}
+    </div>
+    <div class="field-box">
+        <label class="required inline" >enviado a:</label>
+        {{ documento_detalle.destinatario|escape }}
+    </div>
+    <div class="field-box">
+        <label class="required inline" >Estado del Documento:</label>
+        {{ documento_detalle.estado|escape }}
+    </div>
+    <div class="field-box">
+        <label class="required inline" >Observaciones:</label>
+        {{ documento_detalle.observacion|escape }}
+    </div>
+</div>
+</fieldset>
+</form>
+    {% block result_list %}
+        <table>
+        <THEAD>
+            <TR>
+            <TH>&rsaquo;</TH>
+            <TH>{% trans 'Curso' %}</TH>
+            <TH>{% trans 'Código' %}</TH>
+            <TH>{% trans 'Grupo Horario' %}</TH>
+            <TH>{% trans 'Docente' %}</TH>
+            <TH>{% trans 'Fecha Matrícula' %}</TH>
+            <TH>{% trans 'Convalidado' %}</TH>
+            <TH>{% trans 'Aprobado' %}</TH>
+            <TH>{% trans 'Activada' %}</TH>
+            </TR>
+        </THEAD>
+        <TBODY>
+            {% for curso in cursos %}
+                <TR class="{% cycle 'row1' 'row2' %}">
+                <TD>&rsaquo;</TD>
+                <TD><a href="../detalle/{{ curso.id }}/" onclick="return abrir_popup('../detalle/{{ curso.id }}/');" >{{ curso.PeriodoCurso.usuario.id|escape }}</a></TD>
+                <TD>{{ curso.PeriodoCurso.Curso.Codigo|escape }}</TD>
+                <TD>{{ curso.PeriodoCurso.Grupo|escape }}</TD>
+                <TD>{{ curso.estado|escape }}</TD>
+                <TD>{{ curso.documento|escape }}</TD>
+                <TD>
+                    {% if curso.Convalidado %}
+                        <img alt="1" src="{% admin_media_prefix %}img/admin/icon-yes.gif"/>
+                        RES. Nº {{ curso.Resolucion|escape }}
+                    {% else %}
+                        <img alt="0" src="{% admin_media_prefix %}img/admin/icon-no.gif"/>
+                        {{ curso.Resolucion|escape }}
+                    {% endif %}
+                </TD>
+                <TD>
+                    {% if curso.aprobado %}
+                        <img alt="1" src="{% admin_media_prefix %}img/admin/icon-yes.gif"/>
+                    {% else %}
+                        <img alt="0" src="{% admin_media_prefix %}img/admin/icon-no.gif"/>
+                    {% endif %}
+                </TD>
+                <TD>
+                    {% if curso.Estado %}
+                        <img alt="1" src="{% admin_media_prefix %}img/admin/icon-yes.gif"/>
+                    {% else %}
+                    <img alt="0" src="{% admin_media_prefix %}img/admin/icon-no.gif"/>
+                    {% endif %}
+                </TD>
+                {% if perms.Matriculas.change_matriculacursos %}
+                    <TD><a class="changelink" href="../editar/{{ curso.id|escape }}/"  onclick="return abrir_popup('../editar/{{ curso.id|escape }}/');"></a></TD>
+                {% endif %}
+                    
+                {% if perms.Matriculas.delete_matriculacursos %}
+                    <TD><a class="deletelink" href="../{{ curso.id|escape }}/delete/"  onclick="return abrir_popup('../{{ curso.id|escape }}/delete/');"></a></TD>
+                {% endif %}
+                </TR>
+            {% endfor %}
+        </TBODY>
+        </table>
+    {% endblock %}
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "admin/base_site.html" %}
+{% load i18n adminmedia %}
+
+{% block extrahead %}{{ block.super }}
+<script type="text/javascript" src="../../../jsi18n/"></script>
+<link rel="stylesheet" type="text/css" href="/static/forms.css" />
+{% endblock %}
+{% block title %} Documento {% endblock %}
+
+{% block branding %}
+<h1 id="site-name">{% trans 'Detalle del Documento' %}</h1>
+{% endblock %}
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  hola
+<a href="javascript: window.close()">{% trans 'Cerrar todo' %} &rsaquo; </a>
+</div>
+{% endblock %}
+{% block content %}
+
+<form id='formulario' name='formulario' method="POST" action="">{% csrf_token %}    
+<fieldset class="module aligned">
+<h2>Datos del Documento</h2>
+<div class="form-row">
+    <div class="field-box">    
+        <label class="required" >usuario:</label>
+        {{ documento_detalle.usuario|escape }}
+    </div>
+    <div class="field-box">
+        <label class="required" >Asunto:</label>
+        {{ documento_detalle.documento|escape }}
+    </div>
+    <div class="field-box">
+        <label class="required inline" >Area recibida:</label>
+        {{ documento_detalle.area|escape }}
+    </div>
+    <div class="field-box">
+        <label class="required inline" >enviado a:</label>
+        {{ documento_detalle.destinatario|escape }}
+    </div>
+    <div class="field-box">
+        <label class="required inline" >Estado del Documento:</label>
+        {{ documento_detalle.estado|escape }}
+    </div>
+    <div class="field-box">
+        <label class="required inline" >Observaciones:</label>
+        {{ documento_detalle.observacion|escape }}
+    </div>
+</div>
+</fieldset>
+</form>
+{% endblock %}
