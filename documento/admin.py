@@ -31,6 +31,11 @@ class DocumentoAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         obj.usuario = request.user
         obj.save()
+
+    def queryset(self, request):
+        qs = super(DocumentoAdmin, self).queryset(request)
+        if request.user.is_superuser:
+            return qs
     
 admin.site.register(Documento, DocumentoAdmin)
 
