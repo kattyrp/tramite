@@ -67,6 +67,7 @@ class Remitente(models.Model):
         return u' %s ' % (self.mom_pernat)
 
 class Documento(models.Model):
+    usuario = models.ForeignKey(User)
     area = models.ForeignKey(Area,verbose_name="Area Destinataria")
     remitente = models.ForeignKey(Remitente,verbose_name="Remitentes",related_name="remitentes")
     tipodoc = models.ForeignKey(Tipo_Documento,verbose_name="Tipo de Documento")
