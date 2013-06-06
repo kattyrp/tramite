@@ -67,7 +67,6 @@ class Remitente(models.Model):
         return u' %s ' % (self.mom_pernat)
 
 class Usuario(User):
-    usuario = models.ForeignKey(User,related_name="usuarios")
     Nombres = models.CharField(max_length=50)
     ApellidoPaterno = models.CharField("Ape. Pat.",max_length=50)
     ApellidoMaterno = models.CharField("Ape. Mat.",max_length=50)
