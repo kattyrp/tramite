@@ -36,7 +36,7 @@ class DocumentoAdmin(admin.ModelAdmin):
         qs = super(DocumentoAdmin, self).queryset(request)
         if request.user.is_superuser:
             return qs
-    
+        return qs.filter(usuario=request.user)
 admin.site.register(Documento, DocumentoAdmin)
 
 admin.site.register(Requisito)
