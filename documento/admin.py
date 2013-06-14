@@ -16,7 +16,7 @@ class RemitenteAdmin(admin.ModelAdmin):
     valid_lookups = ('documento')
 admin.site.register(Remitente,RemitenteAdmin)
 
-
+    
 class DocumentoAdmin(admin.ModelAdmin):
     list_display = ('remitente','area','tipodoc','asunto','estado','ver_seguimiento','ver_historial','archivo')
     search_fields = ('asunto__nom_asunto','remitente__mom_pernat')
@@ -40,6 +40,13 @@ class DocumentoAdmin(admin.ModelAdmin):
         if request.user.is_superuser:
             return qs
         return qs.filter(usuario=request.user)
+
+    def queryset(self, request):
+        qs = super(DocumentoAdmin, self).queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.filter(usuarea=request.user)
+
 
 admin.site.register(Documento,DocumentoAdmin)
 admin.site.register(Requisito)
