@@ -22,7 +22,7 @@ class DocumentoAdmin(admin.ModelAdmin):
     search_fields = ('asunto__nom_asunto','remitente__mom_pernat')
     fieldsets = (
         ('Datos del Documento', {
-            'fields': ('area','remitente','tipodoc','asunto','archivo','folios','observacion'),
+            'fields': ('area','usuarea','remitente','tipodoc','asunto','archivo','folios','observacion'),
         }),
     )
     raw_id_fields = ('remitente',)
