@@ -94,6 +94,7 @@ class Usuario(User):
 class Documento(models.Model):
     usuario = models.ForeignKey(User)
     area = models.ForeignKey(Area,verbose_name="Area Destinataria")
+    usuarea = models.ForeignKey(Usuario,verbose_name="Usuario Destinataria",related_name="usuario derivado")
     remitente = models.ForeignKey(Remitente,verbose_name="Remitentes",related_name="remitentes")
     tipodoc = models.ForeignKey(Tipo_Documento,verbose_name="Tipo de Documento")
     asunto = models.ForeignKey(Asunto,verbose_name="Asunto")
