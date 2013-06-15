@@ -2,6 +2,7 @@ from django.contrib import admin
 from documento.models import Requisito, Asunto, Tipo_Documento, Estado_Documento, Area, Remitente, Documento,Documento_generado, Usuario
 from django import forms
 from django.contrib.auth.models import User
+from django.db.models import Q
 
 class RemitenteAdmin(admin.ModelAdmin):
 
@@ -35,18 +36,12 @@ class DocumentoAdmin(admin.ModelAdmin):
         obj.usuario = request.user
         obj.save()
 
-    def queryset(self, request):
-        qs = super(DocumentoAdmin, self).queryset(request)
-        if request.user.is_superuser:
-            return qs
-        return qs.filter(usuario=request.user)
 
     def queryset(self, request):
         qs = super(DocumentoAdmin, self).queryset(request)
         if request.user.is_superuser:
             return qs
-        return qs.filter(usuarea=request.user)
-
+        return qs.filter(Q(usuario=request.user) | Q(usuarea=request.user))
 
 admin.site.register(Documento,DocumentoAdmin)
 admin.site.register(Requisito)
